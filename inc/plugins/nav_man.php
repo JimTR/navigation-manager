@@ -1,6 +1,6 @@
 <?php
 /*
- * nav_man2.php
+ * nav_man.php
  * 
  * Copyright 2026 Jim Richardson <jim@phporyx.co.uk>
  * 
@@ -23,11 +23,11 @@
  */
 if(!defined("IN_MYBB")){die("You Cannot Access This File Directly. Please Make Sure IN_MYBB Is Defined.");}
 $calling_hook = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_FILENAME)."_end";
-$plugins->add_hook($calling_hook, 'nav_man2_mangle_nav');
+$plugins->add_hook($calling_hook, 'nav_man_mangle_nav');
 $GLOBALS['nav_codename'] = basename(__FILE__, '.php');
 $GLOBALS['calling_hook'] = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_FILENAME)."_end";
 
-function nav_man2_info() {
+function nav_man_info() {
 /*
  * 
  * name: nav-man2_info
@@ -51,7 +51,7 @@ function nav_man2_info() {
 	
 }
 
-function nav_man2_install(){
+function nav_man_install(){
 	global $mybb, $db, $nav_codename;
 	$group_data = array(
 		'name'		=> "{$nav_codename}",
@@ -75,7 +75,7 @@ function nav_man2_install(){
 	}
 }
 
-function nav_man2_is_installed(){
+function nav_man_is_installed(){
 	global $mybb, $db, $nav_codename;
 	// check for setting 
 	$name="{$nav_codename}_home_title";
