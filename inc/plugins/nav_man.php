@@ -52,9 +52,27 @@ function nav_man2_info() {
 }
 
 function nav_man2_install(){
-	//install routine
-	//flash_message("Nothing To install", 'error');
-	//return false;
+	global $mybb, $db, $nav_codename;
+	$group_data = array(
+		'name'		=> "{$nav_codename}",
+		'title'		=> 'Navigation Manager 2',
+		'description'	=> 'Settings for the Navigation Manager  plugin.',
+		'disporder'	=> 1,
+		'isdefault'	=> 0
+	);
+	$query = $db->simple_select(
+		'settinggroups',
+		'gid',
+		"name='$nav_codename'"
+	);
+
+	$gid = (int) $db->fetch_field($query, 'gid');
+	if (!$gid) {
+		$gid = (int) $db->insert_query('settinggroups', $group_data);
+	} 
+	else {
+		$db->update_query('settinggroups', $group_data, "gid='{$gid}'");
+	}
 }
 
 function nav_man2_is_installed(){
@@ -75,7 +93,7 @@ function nav_man2_is_installed(){
 	return false;
 }
 
-function nav_man2_activate(){
+function nav_man_activate(){
 	// activation code
 	global $mybb, $db, $nav_codename;
 	
@@ -161,7 +179,7 @@ function nav_man2_activate(){
 		}
 	}
 }
-function nav_man2_deactivate(){
+function nav_man_deactivate(){
 	// deactive code
 	global $mybb, $db, $nav_codename;
 	$db->delete_query('settinggroups', "name='{$nav_codename}'");
@@ -169,7 +187,7 @@ function nav_man2_deactivate(){
 	
 }
 
-function nav_man2_uninstall(){
+function nav_man_uninstall(){
 	// uninstall
 	global $mybb, $db, $lang,$page, $nav_codename;
 	if ($mybb->request_method != 'post') {
@@ -182,6 +200,11 @@ function nav_man2_uninstall(){
 	if (isset($mybb->input['no'])) {
 		admin_redirect('index.php?module=config-plugins');
 	}
+	if (!verify_post_check($mybb->get_input('my_post_key'))) {
+		flash_message("Security validation failed. Please try again.", 'error');
+		admin_redirect('index.php?module=config-plugins');
+		return;
+	}
 	$setting_names = array(
 		"{$nav_codename}_home_title",
 		"{$nav_codename}_home_page",
@@ -190,14 +213,15 @@ function nav_man2_uninstall(){
 		"{$nav_codename}_files"
 	);
 	foreach ($setting_names as $setting){
-		$db->delete_query('settings', "name = '$setting'");
+		$setting = $db->escape_string($setting);
+		$db->delete_query('settings', "name = '{$setting}'");
 	}
 	$db->delete_query('settinggroups', "name = '$nav_codename'");
 	rebuild_settings();
 	// TODO delete Files
 }
 
-function nav_man2_mangle_nav() {
+function nav_man_mangle_nav() {
 	global $mybb, $navbits, $nav_codename;
 
 	$home_url = trim($mybb->settings["{$nav_codename}_home_page"]);
@@ -253,7 +277,7 @@ function nav_man2_mangle_nav() {
 	}
 }
 /*
-function nav_man2_debug_output($contents) {
+function nav_man_debug_output($contents) {
 	global $navbits,$calling_hook;
 	$debug = '<pre>'.htmlspecialchars(print_r($navbits, true)).'</pre>';
 	$debug .= "Calling Hook $calling_hook";
