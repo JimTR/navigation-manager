@@ -30,7 +30,7 @@ $GLOBALS['calling_hook'] = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_FILENAME).
 function nav_man_info() {
 /*
  * 
- * name: nav-man2_info
+ * name: nav-man_info
  * sends plugin info back to mybb
  * 
  * 
