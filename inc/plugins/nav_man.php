@@ -1,0 +1,1 @@
+/home/c/public_html/inc/plugins/nav_man.php
