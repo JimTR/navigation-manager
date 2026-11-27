@@ -38,14 +38,14 @@ function nav_man_info() {
 	global $nav_codename;
 
 	return array(
-		"name"			=> 'Navigation Manager ('.$nav_codename.')',
+		"name"			=> 'Navigation Manager',
 		"description"	=> "Control the navigation system",
 		"website"		=> "https://phporyx.co.uk/plugins",
 		"author"			=> 'JimR',
 		"authorsite"	=> "https://community.mybb.com/user-37677.html",
 		"version"		=> '2.00a',
 		"guid" 			=> '',
-		"codename"	=> "navman2",
+		"codename"	=> "navman",
 		"compatibility" => '18*'
 	);
 	
@@ -261,6 +261,11 @@ function nav_man_mangle_nav() {
 	) {
 		return;
 	}
+	if ($is_home) {
+		$navbits[0]['name'] = $home_title;
+		$navbits[0]['url'] = $home_url;
+	return;
+}
 
 	if (in_array(THIS_SCRIPT, $home_scripts, true)) {
 		unset($tmp_navbits[0]);
